@@ -119,17 +119,23 @@ async def check_evolution(species_url: str, current_level: int):
         return find_next_evo(evo_data["chain"], species_data["name"])
 
 async def encounter_engine():
-    """Background task that periodically spawns a pokemon and broadcasts it."""
+    """Background task that periodically spawns a pokemon for each player."""
+    import json
     while True:
         await asyncio.sleep(random.randint(10, 20)) # Spawn every 10-20 seconds
         
-        # Pick a random generation (1 to 9) 1..1025
-        random_id = random.randint(1, 1025)
-        
-        pkmn_data = await fetch_pokemon_data(random_id)
-        if pkmn_data:
-            import json
-            await manager.broadcast(json.dumps({
-                "type": "encounter",
-                "data": pkmn_data
-            }))
+        async def spawn_for_connection(conn):
+            random_id = random.randint(1, 1025)
+            pkmn_data = await fetch_pokemon_data(random_id)
+            if pkmn_data:
+                try:
+                    await conn.send_text(json.dumps({
+                        "type": "encounter",
+                        "data": pkmn_data
+                    }))
+                except Exception:
+                    pass
+
+        tasks = [spawn_for_connection(conn) for conn in manager.active_connections]
+        if tasks:
+            await asyncio.gather(*tasks)
