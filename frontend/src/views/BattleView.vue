@@ -8,16 +8,17 @@
       <div v-if="store.myPokemon.length === 0" style="color: var(--text-muted)">
         You need to catch a Pokémon first!
       </div>
-      <div style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px">
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; max-height: 65vh; overflow-y: auto; padding-right: 10px;" class="custom-scrollbar">
         <div 
           v-for="p in store.myPokemon" 
           :key="p.id" 
           class="glass-panel pokemon-card" 
-          style="min-width: 200px; display: flex; flex-direction: column; gap: 10px;"
+          style="display: flex; flex-direction: column; align-items: center; gap: 10px;"
         >
-          <img :src="p.sprite_url" :alt="p.name" />
+          <img :src="p.sprite_url" :alt="p.name" style="width: 96px; height: 96px;" />
           <h4 style="text-transform: capitalize">{{ p.name }}</h4>
-          <div style="display: flex; gap: 10px; margin-top: auto">
+          <span style="background: var(--primary); color: black; font-weight: bold; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem;">Lv. {{ p.level }}</span>
+          <div style="display: flex; gap: 10px; width: 100%; margin-top: auto">
             <button class="btn btn-secondary" style="flex: 1; padding: 5px; font-size: 0.9em" @click="findMatch(p, 'pvp')">PvP</button>
             <button class="btn" style="flex: 1; padding: 5px; font-size: 0.9em" @click="findMatch(p, 'pve')">PvE</button>
           </div>
