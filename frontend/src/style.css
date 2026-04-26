@@ -282,9 +282,19 @@ nav a:hover, nav a.router-link-active {
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   aspect-ratio: 1;
+  gap: 2px;
+}
+
+.pc-level-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  line-height: 1;
+  font-family: var(--font-mono);
 }
 
 .pc-box-item:hover, .pc-box-item.selected {
@@ -294,8 +304,8 @@ nav a:hover, nav a.router-link-active {
 }
 
 .pc-box-item img {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   object-fit: contain;
 }
 
@@ -333,3 +343,75 @@ nav a:hover, nav a.router-link-active {
   background: var(--primary);
   border-radius: 4px;
 }
+
+/* Battle Arena — Selection Grid */
+.battle-select-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .battle-select-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .battle-select-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.battle-select-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 10px 10px;
+  gap: 6px;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.battle-select-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--secondary);
+  box-shadow: 0 0 18px rgba(255, 42, 109, 0.25);
+}
+
+.battle-select-sprite {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+  transition: filter 0.2s;
+}
+
+.battle-select-card:hover .battle-select-sprite {
+  filter: drop-shadow(0 0 14px rgba(255, 42, 109, 0.5));
+}
+
+.battle-select-info {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.battle-select-buttons {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.lv-badge {
+  background: var(--primary);
+  color: #000;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 12px;
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+}
+

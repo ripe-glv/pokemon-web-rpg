@@ -17,6 +17,7 @@
           @click="selectedPokemon = p"
         >
           <img :src="p.sprite_url" :alt="p.name" />
+          <span class="pc-level-badge">Lv.{{ p.level }}</span>
         </div>
       </div>
 
