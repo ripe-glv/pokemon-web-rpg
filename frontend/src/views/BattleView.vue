@@ -123,10 +123,8 @@ const isGameOver = computed(() => {
   return battleState.value?.turn === null
 })
 
-onMounted(async () => {
-  await store.fetchMyPokemon()
-  
-  // Setup WebSocket connection when entering the view
+const connectWebSocket = () => {
+  if (ws) ws.close()
   if (store.token) {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     ws = new WebSocket(`${protocol}//${window.location.host}/ws/battle/${store.token}`)
@@ -139,8 +137,12 @@ onMounted(async () => {
         waiting.value = false
         battleState.value = data.state
       } else if (data.type === 'player_disconnected') {
-        alert("Opponent disconnected.")
-        reset()
+        if (battleState.value) {
+          battleState.value.log.push("Opponent disconnected.")
+          battleState.value.turn = null
+        } else {
+          waiting.value = false
+        }
       } else if (data.type === 'xp_gain' || data.type === 'evolution') {
         if (battleState.value) {
           battleState.value.log.push(data.message)
@@ -148,6 +150,11 @@ onMounted(async () => {
       }
     }
   }
+}
+
+onMounted(async () => {
+  await store.fetchMyPokemon()
+  connectWebSocket()
 })
 
 onUnmounted(() => {
@@ -183,11 +190,6 @@ const hpColor = (hp: number, max: number) => {
 const reset = () => {
   battleState.value = null
   waiting.value = false
-  if (ws) {
-    ws.close()
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    ws = new WebSocket(`${protocol}//${window.location.host}/ws/battle/${store.token}`)
-    // Re-bind events here or reload component
-  }
+  connectWebSocket()
 }
 </script>
