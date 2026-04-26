@@ -55,6 +55,9 @@ class BattleManager:
             self.user_battles[player1["user_id"]] = battle_id
             self.user_battles[player2["user_id"]] = battle_id
             
+            # Connect Player 1 to the battle room
+            await self.connect(player1["ws"], battle_id)
+            
             self.waiting_user = None
             
             return battle_id
